@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>转换统计 - Clash to Singbox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .success-rate {
+            color: #48bb78;
+        }
+        
+        .error-rate {
+            color: #f56565;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-container h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(
+                #48bb78 0deg,
+                #48bb78 var(--success-angle, 270deg),
+                #f56565 var(--success-angle, 270deg),
+                #f56565 360deg
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pie-center {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-weight: bold;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-button a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .back-button a:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 20px auto;
+            display: block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .runtime-info {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .runtime-info h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .runtime-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button">
+            <a href="/">← 返回主页</a>
+        </div>
+        
+        <div class="header">
+            <h1>📊 转换统计</h1>
+            <p>实时监控规则转换服务的使用情况</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalConversions">{{ stats.total_conversions }}</div>
+                <div class="stat-label">总转换次数</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number success-rate" id="successfulConversions">{{ stats.successful_conversions }}</div>
+                <div class="stat-label">成功转换</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number error-rate" id="failedConversions">{{ stats.failed_conversions }}</div>
+                <div class="stat-label">转换失败</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="successRate">
+                    {% if stats.total_conversions > 0 %}
+                        {{ "%.1f"|format((stats.successful_conversions / stats.total_conversions * 100)) }}%
+                    {% else %}
+                        0.0%
+                    {% endif %}
+                </div>
+                <div class="stat-label">成功率</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2>成功率分布</h2>
+            <div class="pie-chart" id="pieChart">
+                <div class="pie-center">
+                    <div id="centerRate">
+                        {% if stats.total_conversions > 0 %}
+                            {{ "%.1f"|format((stats.successful_conversions / stats.total_conversions * 100)) }}%
+                        {% else %}
+                            0.0%
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #718096;">成功率</div>
+                </div>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #48bb78;"></div>
+                    <span>成功</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f56565;"></div>
+                    <span>失败</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="runtime-info">
+            <h3>服务运行信息</h3>
+            <p>服务启动时间: <span id="startTime">{{ stats.start_time }}</span></p>
+            <p>运行时长: <span id="uptime">计算中...</span></p>
+        </div>
+        
+        <button class="refresh-btn" onclick="refreshStats()">🔄 刷新数据</button>
+    </div>
+
+    <script>
+        function updatePieChart(successRate) {
+            const pieChart = document.getElementById('pieChart');
+            const angle = (successRate / 100) * 360;
+            pieChart.style.setProperty('--success-angle', angle + 'deg');
+        }
+        
+        function calculateUptime(startTime) {
+            const start = new Date(startTime);
+            const now = new Date();
+            const diff = now - start;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            let uptime = '';
+            if (days > 0) uptime += `${days}天 `;
+            if (hours > 0) uptime += `${hours}小时 `;
+            uptime += `${minutes}分钟`;
+            
+            return uptime;
+        }
+        
+        async function refreshStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+                
+                document.getElementById('totalConversions').textContent = stats.total_conversions;
+                document.getElementById('successfulConversions').textContent = stats.successful_conversions;
+                document.getElementById('failedConversions').textContent = stats.failed_conversions;
+                
+                const successRate = stats.total_conversions > 0 
+                    ? (stats.successful_conversions / stats.total_conversions * 100) 
+                    : 0;
+                    
+                document.getElementById('successRate').textContent = successRate.toFixed(1) + '%';
+                document.getElementById('centerRate').textContent = successRate.toFixed(1) + '%';
+                
+                updatePieChart(successRate);
+                
+                document.getElementById('startTime').textContent = stats.start_time;
+                document.getElementById('uptime').textContent = calculateUptime(stats.start_time);
+                
+            } catch (error) {
+                console.error('刷新统计数据失败:', error);
+            }
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalConversions = parseInt(document.getElementById('totalConversions').textContent);
+            const successfulConversions = parseInt(document.getElementById('successfulConversions').textContent);
+            
+            const successRate = totalConversions > 0 ? (successfulConversions / totalConversions * 100) : 0;
+            updatePieChart(successRate);
+            
+            const startTime = document.getElementById('startTime').textContent;
+            document.getElementById('uptime').textContent = calculateUptime(startTime);
+            
+            // 每分钟更新一次运行时长
+            setInterval(() => {
+                document.getElementById('uptime').textContent = calculateUptime(startTime);
+            }, 60000);
+        });
+    </script>
+</body>
+</html> 

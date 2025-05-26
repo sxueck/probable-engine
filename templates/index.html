@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash to Singbox 规则转换工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .usage-section {
+            grid-column: 1 / -1;
+        }
+        
+        .url-format {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .example {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .converter-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result.success {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            color: #2d3748;
+        }
+        
+        .result.error {
+            background: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #742a2a;
+        }
+        
+        .stats-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .stats-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        
+        .stats-link a:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Clash to Singbox 规则转换工具</h1>
+            <p>实时转换 Clash 格式规则为 Singbox 规则集格式</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="card usage-section">
+                <h2>📖 使用说明</h2>
+                <p>本工具支持两种使用方式：</p>
+                
+                <h3 style="margin: 20px 0 10px 0; color: #667eea;">1. API 接口调用</h3>
+                <div class="url-format">
+                    GET /rules/{clash_rule_url}
+                </div>
+                
+                <div class="example">
+                    <strong>示例：</strong><br>
+                    <code>http://127.0.0.1:8080/rules/https://gitlab.com/SukkaW/ruleset.skk.moe/-/raw/master/List/domainset/game-download.conf</code>
+                </div>
+                
+                <h3 style="margin: 20px 0 10px 0; color: #667eea;">2. 在线转换工具</h3>
+                <p>使用下方的表单直接输入 URL 或文本内容进行转换。</p>
+            </div>
+            
+            <div class="card">
+                <h2>🔄 URL 转换</h2>
+                <div class="converter-form">
+                    <div class="form-group">
+                        <label for="ruleUrl">Clash 规则文件 URL:</label>
+                        <input type="url" id="ruleUrl" placeholder="https://example.com/clash-rules.conf">
+                    </div>
+                    <button class="btn" onclick="convertFromUrl()">转换规则</button>
+                    <div id="urlResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📝 文本转换</h2>
+                <div class="converter-form">
+                    <div class="form-group">
+                        <label for="ruleText">Clash 规则内容:</label>
+                        <textarea id="ruleText" rows="8" placeholder="粘贴 Clash 规则内容..."></textarea>
+                    </div>
+                    <button class="btn" onclick="convertFromText()">转换规则</button>
+                    <div id="textResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-link">
+            <a href="/stats">📊 查看转换统计</a>
+        </div>
+    </div>
+
+    <script>
+        async function convertFromUrl() {
+            const url = document.getElementById('ruleUrl').value;
+            const resultDiv = document.getElementById('urlResult');
+            
+            if (!url) {
+                showResult(resultDiv, 'error', '请输入有效的 URL');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/rules/${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult(resultDiv, 'success', JSON.stringify(data, null, 2));
+                } else {
+                    showResult(resultDiv, 'error', data.error || '转换失败');
+                }
+            } catch (error) {
+                showResult(resultDiv, 'error', '网络错误: ' + error.message);
+            }
+        }
+        
+        async function convertFromText() {
+            const text = document.getElementById('ruleText').value;
+            const resultDiv = document.getElementById('textResult');
+            
+            if (!text.trim()) {
+                showResult(resultDiv, 'error', '请输入规则内容');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content: text })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult(resultDiv, 'success', JSON.stringify(data, null, 2));
+                } else {
+                    showResult(resultDiv, 'error', data.error || '转换失败');
+                }
+            } catch (error) {
+                showResult(resultDiv, 'error', '网络错误: ' + error.message);
+            }
+        }
+        
+        function showResult(element, type, content) {
+            element.className = `result ${type}`;
+            element.textContent = content;
+            element.style.display = 'block';
+        }
+    </script>
+</body>
+</html> 
