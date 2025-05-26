@@ -31,8 +31,11 @@ def update_stats(success=True):
 def parse_clash_rules(content):
     """解析Clash格式规则为Singbox格式"""
     lines = content.strip().split('\n')
+    
+    # 分类存储不同类型的规则
     domain_suffixes = []
     domains = []
+    domain_keywords = []
     
     for line in lines:
         line = line.strip()
@@ -40,17 +43,30 @@ def parse_clash_rules(content):
         # 跳过注释和空行
         if not line or line.startswith('#') or line.startswith('//'):
             continue
-            
-        # 处理特殊标记行
-        if 'th1s_rule5et_1s_m4d3_by_5ukk4w' in line:
+        
+        # 解析 Clash 格式规则
+        if line.startswith('DOMAIN-SUFFIX,'):
+            domain = line[14:].strip()
+            if domain:
+                domain_suffixes.append(domain)
+        elif line.startswith('DOMAIN,'):
+            domain = line[7:].strip()
+            if domain:
+                domains.append(domain)
+        elif line.startswith('DOMAIN-KEYWORD,'):
+            keyword = line[15:].strip()
+            if keyword:
+                domain_keywords.append(keyword)
+        elif line.startswith('USER-AGENT,') or line.startswith('PROCESS-NAME,'):
+            # 跳过不支持的规则类型
             continue
-            
-        # 处理以点开头的域名后缀
-        if line.startswith('.'):
-            domain_suffixes.append(line[1:])
-        elif line and not line.startswith('!'):
-            # 普通域名
-            domains.append(line)
+        else:
+            # 处理以点开头的域名后缀（旧格式）
+            if line.startswith('.'):
+                domain_suffixes.append(line[1:])
+            elif line and not line.startswith('!'):
+                # 普通域名（旧格式）
+                domains.append(line)
     
     # 构建Singbox规则集格式
     rules = []
@@ -63,6 +79,11 @@ def parse_clash_rules(content):
     if domains:
         rules.append({
             "domain": domains
+        })
+    
+    if domain_keywords:
+        rules.append({
+            "domain_keyword": domain_keywords
         })
     
     return {
