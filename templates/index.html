@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clash to Singbox 规则转换工具</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,158 +15,220 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'SF Pro Text', -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #FEFEFE;
             min-height: 100vh;
-            color: #333;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            font-feature-settings: 'kern' 1, 'liga' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            width: 100%;
+            grid-template-areas: 
+                "header"
+                "content"
+                "footer";
         }
         
         .header {
+            grid-area: header;
+            background-color: #F8F8F8;
+            color: #1a1a1a;
+            padding: 24px;
             text-align: center;
-            margin-bottom: 40px;
-            color: white;
+            border-bottom: 2px solid #2E2E2E;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            color: #4a4a4a;
+            font-weight: 400;
+            line-height: 1.4;
         }
         
         .main-content {
+            grid-area: content;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            gap: 10px;
+            padding: 10px;
+            height: 100%;
+            overflow: auto;
         }
         
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+        .instructions {
+            grid-column: 1 / 13;
+            grid-row: 1 / 5;
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            overflow: auto;
         }
         
-        .card h2 {
-            color: #4a5568;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+        .url-converter {
+            grid-column: 1 / 7;
+            grid-row: 5 / 13;
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
         
-        .usage-section {
-            grid-column: 1 / -1;
+        .text-converter {
+            grid-column: 7 / 13;
+            grid-row: 5 / 13;
+            background: #FFFBEB;
+            border: 1px solid #F0C814;
+            box-shadow: 0 1px 3px rgba(240, 200, 20, 0.15);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stats-link {
+            grid-area: footer;
+            background-color: #0066CC;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            border-top: 2px solid #2E2E2E;
+        }
+        
+        h2 {
+            color: #1a1a1a;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
         }
         
         .url-format {
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: 'Monaco', 'Courier New', monospace;
+            background: #F8F9FA;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            padding: 14px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
             font-size: 0.9rem;
             overflow-x: auto;
+            line-height: 1.5;
         }
         
         .example {
-            background: #e6fffa;
-            border-left: 4px solid #38b2ac;
-            padding: 15px;
-            margin: 15px 0;
+            background: #F8F9FA;
+            border-left: 3px solid #0066CC;
+            border-radius: 0 4px 4px 0;
+            padding: 16px;
+            margin: 16px 0;
         }
         
         .converter-form {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: #374151;
+            font-size: 0.95rem;
         }
         
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
             font-size: 14px;
-            transition: border-color 0.3s;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            line-height: 1.4;
         }
         
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
         }
         
         .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: #1F2937;
             color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            padding: 12px 24px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
+            align-self: flex-start;
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            background: #374151;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
         
         .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 12px;
+            margin-top: 16px;
+            padding: 14px;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
             white-space: pre-wrap;
-            max-height: 400px;
             overflow-y: auto;
+            flex: 1;
+            background: #F8F9FA;
+            line-height: 1.5;
         }
         
         .result.success {
-            background: #f0fff4;
-            border: 1px solid #9ae6b4;
-            color: #2d3748;
+            background: #F0F9FF;
+            border-color: #0066CC;
+            color: #1E40AF;
         }
         
         .result.error {
-            background: #fed7d7;
-            border: 1px solid #fc8181;
-            color: #742a2a;
-        }
-        
-        .stats-link {
-            text-align: center;
-            margin-top: 30px;
+            background: #FEF2F2;
+            border-color: #DC2626;
+            color: #B91C1C;
         }
         
         .stats-link a {
@@ -171,28 +236,91 @@
             text-decoration: none;
             font-weight: 500;
             padding: 10px 20px;
-            border: 2px solid white;
-            border-radius: 25px;
-            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            transition: all 0.2s;
         }
         
         .stats-link a:hover {
             background: white;
-            color: #667eea;
+            color: #0066CC;
+            border-color: white;
+        }
+        
+        .api-demo {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .api-demo input {
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .api-demo input:focus {
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+            outline: none;
+        }
+        
+        .api-demo button {
+            padding: 12px;
+        }
+        
+        .api-url {
+            margin-top: 16px;
+            padding: 14px;
+            background: #F0F9FF;
+            border: 1px solid #0066CC;
+            border-radius: 4px;
+            word-break: break-all;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        h3 {
+            margin: 20px 0 16px 0; 
+            color: #1F2937;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
         
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                grid-template-rows: auto auto auto;
+                overflow-y: auto;
+            }
+            
+            .instructions {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            
+            .url-converter {
+                grid-column: 1;
+                grid-row: 2;
+                min-height: 400px;
+            }
+            
+            .text-converter {
+                grid-column: 1;
+                grid-row: 3;
+                min-height: 400px;
             }
             
             .header h1 {
-                font-size: 2rem;
-            }
-            
-            .card {
-                padding: 20px;
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -205,27 +333,27 @@
         </div>
         
         <div class="main-content">
-            <div class="card usage-section">
-                <h2>📖 使用说明</h2>
-                <p>本工具支持两种使用方式：</p>
+            <div class="instructions">
+                <h2>使用说明</h2>
                 
-                <h3 style="margin: 20px 0 10px 0; color: #667eea;">1. API 接口调用</h3>
+                <h3>API 接口调用</h3>
                 <div class="url-format">
                     GET /rules/{clash_rule_url}
                 </div>
                 
                 <div class="example">
-                    <strong>示例：</strong><br>
-                    <code>http://127.0.0.1:8080/rules/https://gitlab.com/SukkaW/ruleset.skk.moe/-/raw/master/List/domainset/game-download.conf</code>
+                    <strong>API 使用示例：</strong><br>
+                    <div class="api-demo">
+                        <input type="url" id="demoUrl" placeholder="输入Clash规则文件URL" value="https://gitlab.com/SukkaW/ruleset.skk.moe/-/raw/master/List/domainset/game-download.conf">
+                        <button class="btn" onclick="generateApiUrl()">生成API地址</button>
+                    </div>
+                    <div id="apiUrlResult" class="api-url"></div>
                 </div>
-                
-                <h3 style="margin: 20px 0 10px 0; color: #667eea;">2. 在线转换工具</h3>
-                <p>使用下方的表单直接输入 URL 或文本内容进行转换。</p>
             </div>
             
-            <div class="card">
-                <h2>🔄 URL 转换</h2>
+            <div class="url-converter">
                 <div class="converter-form">
+                    <h3>URL 转换</h3>
                     <div class="form-group">
                         <label for="ruleUrl">Clash 规则文件 URL:</label>
                         <input type="url" id="ruleUrl" placeholder="https://example.com/clash-rules.conf">
@@ -235,12 +363,12 @@
                 </div>
             </div>
             
-            <div class="card">
-                <h2>📝 文本转换</h2>
+            <div class="text-converter">
                 <div class="converter-form">
+                    <h3>文本转换</h3>
                     <div class="form-group">
                         <label for="ruleText">Clash 规则内容:</label>
-                        <textarea id="ruleText" rows="8" placeholder="粘贴 Clash 规则内容..."></textarea>
+                        <textarea id="ruleText" rows="6" placeholder="粘贴 Clash 规则内容..."></textarea>
                     </div>
                     <button class="btn" onclick="convertFromText()">转换规则</button>
                     <div id="textResult" class="result" style="display: none;"></div>
@@ -249,11 +377,28 @@
         </div>
         
         <div class="stats-link">
-            <a href="/stats">📊 查看转换统计</a>
+            <a href="/stats">查看转换统计</a>
         </div>
     </div>
 
     <script>
+        function getCurrentDomain() {
+            return window.location.origin;
+        }
+        
+        function generateApiUrl() {
+            const sourceUrl = document.getElementById('demoUrl').value;
+            if (!sourceUrl) {
+                alert('请输入规则文件URL');
+                return;
+            }
+            
+            const apiUrl = `${getCurrentDomain()}/rules/${encodeURIComponent(sourceUrl)}`;
+            const resultElement = document.getElementById('apiUrlResult');
+            resultElement.textContent = apiUrl;
+            resultElement.style.display = 'block';
+        }
+        
         async function convertFromUrl() {
             const url = document.getElementById('ruleUrl').value;
             const resultDiv = document.getElementById('urlResult');
@@ -312,6 +457,11 @@
             element.textContent = content;
             element.style.display = 'block';
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面加载完成后初始化API示例
+            generateApiUrl();
+        });
     </script>
 </body>
 </html> 

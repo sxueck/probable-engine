@@ -76,3 +76,5 @@ Thumbs.db
 # Logs
 *.log
 logs/ 
+
+test-rules
