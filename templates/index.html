@@ -43,21 +43,21 @@
             grid-area: header;
             background-color: #F8F8F8;
             color: #1a1a1a;
-            padding: 24px;
+            padding: 20px 24px;
             text-align: center;
             border-bottom: 2px solid #2E2E2E;
         }
         
         .header h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 6px;
             font-weight: 500;
             letter-spacing: -0.02em;
             line-height: 1.2;
         }
         
         .header p {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #4a4a4a;
             font-weight: 400;
             line-height: 1.4;
@@ -66,92 +66,132 @@
         .main-content {
             grid-area: content;
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            gap: 10px;
-            padding: 10px;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr;
+            gap: 12px;
+            padding: 12px;
             height: 100%;
-            overflow: auto;
+            overflow: hidden;
         }
         
-        .instructions {
-            grid-column: 1 / 13;
-            grid-row: 1 / 5;
+        .api-section {
+            grid-column: 1;
+            grid-row: 1;
             background: #FFFFFF;
-            border: 1px solid #E0E0E0;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-            overflow: auto;
+            border: 2px solid #0066CC;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
         .url-converter {
-            grid-column: 1 / 7;
-            grid-row: 5 / 13;
+            grid-column: 2;
+            grid-row: 1;
             background: #FFFFFF;
             border: 1px solid #E0E0E0;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
             padding: 20px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         
         .text-converter {
-            grid-column: 7 / 13;
-            grid-row: 5 / 13;
+            grid-column: 3;
+            grid-row: 1;
             background: #FFFBEB;
             border: 1px solid #F0C814;
             box-shadow: 0 1px 3px rgba(240, 200, 20, 0.15);
+            border-radius: 6px;
             padding: 20px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         
         .stats-link {
             grid-area: footer;
             background-color: #0066CC;
             color: white;
-            padding: 16px;
+            padding: 14px;
             text-align: center;
             border-top: 2px solid #2E2E2E;
         }
         
         h2 {
             color: #1a1a1a;
-            margin-bottom: 18px;
-            font-size: 1.4rem;
-            font-weight: 500;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
             letter-spacing: -0.02em;
             line-height: 1.3;
         }
         
-        .url-format {
-            background: #F8F9FA;
-            border: 1px solid #D1D5DB;
-            border-radius: 4px;
-            padding: 14px;
-            margin: 16px 0;
-            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            line-height: 1.5;
+        h3 {
+            margin: 0 0 16px 0; 
+            color: #1F2937;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
         
-        .example {
-            background: #F8F9FA;
-            border-left: 3px solid #0066CC;
-            border-radius: 0 4px 4px 0;
+        .api-description {
+            background: #F0F9FF;
+            border: 1px solid #0066CC;
+            border-radius: 6px;
+            padding: 18px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .url-format {
+            background: #1F2937;
+            color: #F9FAFB;
+            border-radius: 6px;
             padding: 16px;
             margin: 16px 0;
+            font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            line-height: 1.5;
+            border: 1px solid #374151;
+        }
+        
+        .example-section {
+            background: #F8F9FA;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 16px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .example-title {
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
         }
         
         .converter-form {
             display: flex;
             flex-direction: column;
             flex: 1;
+            overflow: hidden;
         }
         
         .form-group {
             margin-bottom: 15px;
+            flex-shrink: 0;
         }
         
         .form-group label {
@@ -192,6 +232,7 @@
             font-weight: 500;
             transition: all 0.2s;
             align-self: flex-start;
+            flex-shrink: 0;
         }
         
         .btn:hover {
@@ -205,6 +246,16 @@
             cursor: not-allowed;
         }
         
+        .btn-primary {
+            background: #0066CC;
+            border-color: #0066CC;
+        }
+        
+        .btn-primary:hover {
+            background: #0052A3;
+            border-color: #0052A3;
+        }
+        
         .result {
             margin-top: 16px;
             padding: 14px;
@@ -214,9 +265,13 @@
             font-size: 13px;
             white-space: pre-wrap;
             overflow-y: auto;
+            overflow-x: auto;
             flex: 1;
             background: #F8F9FA;
             line-height: 1.5;
+            min-height: 100px;
+            max-height: 800px;
+            word-wrap: break-word;
         }
         
         .result.success {
@@ -248,13 +303,19 @@
         }
         
         .api-demo {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .api-demo-input {
+            display: flex;
             gap: 8px;
-            margin-top: 12px;
         }
         
         .api-demo input {
+            flex: 1;
             padding: 12px;
             border: 1px solid #D1D5DB;
             border-radius: 4px;
@@ -270,11 +331,11 @@
         }
         
         .api-demo button {
-            padding: 12px;
+            padding: 12px 20px;
+            flex-shrink: 0;
         }
         
         .api-url {
-            margin-top: 16px;
             padding: 14px;
             background: #F0F9FF;
             border: 1px solid #0066CC;
@@ -286,23 +347,14 @@
             display: none;
         }
         
-        h3 {
-            margin: 20px 0 16px 0; 
-            color: #1F2937;
-            font-size: 1.2rem;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            line-height: 1.3;
-        }
-        
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto;
+                grid-template-rows: 2fr 1fr 1fr;
                 overflow-y: auto;
             }
             
-            .instructions {
+            .api-section {
                 grid-column: 1;
                 grid-row: 1;
             }
@@ -310,17 +362,36 @@
             .url-converter {
                 grid-column: 1;
                 grid-row: 2;
-                min-height: 400px;
             }
             
             .text-converter {
                 grid-column: 1;
                 grid-row: 3;
-                min-height: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6rem;
             }
             
-            .header h1 {
-                font-size: 1.8rem;
+            .header p {
+                font-size: 0.9rem;
+            }
+            
+            .main-content {
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .api-section,
+            .url-converter,
+            .text-converter {
+                padding: 16px;
+            }
+            
+            .api-demo-input {
+                flex-direction: column;
             }
         }
     </style>
@@ -333,21 +404,32 @@
         </div>
         
         <div class="main-content">
-            <div class="instructions">
-                <h2>使用说明</h2>
+            <div class="api-section">
+                <h2>API 接口调用</h2>
                 
-                <h3>API 接口调用</h3>
+                <div class="api-description">
+                    <strong>主要功能：</strong>通过 API 接口直接转换在线 Clash 规则文件，支持各种规则格式自动识别和转换。
+                </div>
+                
                 <div class="url-format">
                     GET /rules/{clash_rule_url}
                 </div>
                 
-                <div class="example">
-                    <strong>API 使用示例：</strong><br>
+                <div class="example-section">
+                    <div class="example-title">API 地址生成</div>
                     <div class="api-demo">
-                        <input type="url" id="demoUrl" placeholder="输入Clash规则文件URL" value="https://gitlab.com/SukkaW/ruleset.skk.moe/-/raw/master/List/domainset/game-download.conf">
-                        <button class="btn" onclick="generateApiUrl()">生成API地址</button>
+                        <div class="api-demo-input">
+                            <input type="url" id="demoUrl" placeholder="输入Clash规则文件URL" value="https://gitlab.com/SukkaW/ruleset.skk.moe/-/raw/master/List/domainset/game-download.conf">
+                            <button class="btn btn-primary" onclick="generateApiUrl()">生成API地址</button>
+                        </div>
+                        <div id="apiUrlResult" class="api-url"></div>
                     </div>
-                    <div id="apiUrlResult" class="api-url"></div>
+                    
+                    <div class="form-group">
+                        <label>API 响应预览：</label>
+                        <div id="apiPreview" class="result" style="display: block; min-height: 200px;">
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -368,7 +450,7 @@
                     <h3>文本转换</h3>
                     <div class="form-group">
                         <label for="ruleText">Clash 规则内容:</label>
-                        <textarea id="ruleText" rows="6" placeholder="粘贴 Clash 规则内容..."></textarea>
+                        <textarea id="ruleText" rows="4" placeholder="粘贴 Clash 规则内容..."></textarea>
                     </div>
                     <button class="btn" onclick="convertFromText()">转换规则</button>
                     <div id="textResult" class="result" style="display: none;"></div>
@@ -386,7 +468,7 @@
             return window.location.origin;
         }
         
-        function generateApiUrl() {
+        async function generateApiUrl() {
             const sourceUrl = document.getElementById('demoUrl').value;
             if (!sourceUrl) {
                 alert('请输入规则文件URL');
@@ -397,6 +479,24 @@
             const resultElement = document.getElementById('apiUrlResult');
             resultElement.textContent = apiUrl;
             resultElement.style.display = 'block';
+            
+            // 显示加载状态
+            const previewElement = document.getElementById('apiPreview');
+            showResult(previewElement, '', '正在加载转换结果...');
+            
+            // 调用API并显示预览
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult(previewElement, 'success', JSON.stringify(data, null, 2));
+                } else {
+                    showResult(previewElement, 'error', data.error || '转换失败');
+                }
+            } catch (error) {
+                showResult(previewElement, 'error', '网络错误: ' + error.message);
+            }
         }
         
         async function convertFromUrl() {
@@ -459,8 +559,14 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            // 页面加载完成后初始化API示例
-            generateApiUrl();
+            // 页面加载完成后只生成API地址，不执行转换
+            const sourceUrl = document.getElementById('demoUrl').value;
+            if (sourceUrl) {
+                const apiUrl = `${getCurrentDomain()}/rules/${encodeURIComponent(sourceUrl)}`;
+                const resultElement = document.getElementById('apiUrlResult');
+                resultElement.textContent = apiUrl;
+                resultElement.style.display = 'block';
+            }
         });
     </script>
 </body>

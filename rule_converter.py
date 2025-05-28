@@ -26,8 +26,8 @@ class RuleConverter:
         self.supported_clash_rules = {
             'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'GEOIP', 
             'IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-PORT', 
-            'DST-PORT', 'PROCESS-NAME', 'PROCESS-PATH', 'MATCH',
-            'GEOSITE', 'USER-AGENT', 'URL-REGEX'
+            'DST-PORT', 'PROCESS-PATH', 'MATCH',
+            'GEOSITE', 'URL-REGEX'
         }
         
         self.rule_stats = {
@@ -330,12 +330,8 @@ class RuleConverter:
     
     def convert_process_rule(self, argument: str, is_path: bool = False) -> Dict[str, List[str]]:
         """转换进程规则"""
-        field_name = "process_path" if is_path else "process_name"
+        field_name = "process_path"
         return {field_name: [argument]}
-    
-    def convert_user_agent_rule(self, argument: str) -> Dict[str, List[str]]:
-        """转换USER-AGENT规则"""
-        return {"user_agent": [argument]}
     
     def convert_url_regex_rule(self, argument: str) -> Dict[str, List[str]]:
         """转换URL-REGEX规则"""
@@ -366,12 +362,8 @@ class RuleConverter:
             return self.convert_port_rule(argument, True)
         elif rule_type == 'DST-PORT':
             return self.convert_port_rule(argument, False)
-        elif rule_type == 'PROCESS-NAME':
-            return self.convert_process_rule(argument, False)
         elif rule_type == 'PROCESS-PATH':
             return self.convert_process_rule(argument, True)
-        elif rule_type == 'USER-AGENT':
-            return self.convert_user_agent_rule(argument)
         elif rule_type == 'URL-REGEX':
             return self.convert_url_regex_rule(argument)
         elif rule_type == 'MATCH':
